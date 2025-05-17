@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perpustakaan Kabupaten Jepara - Daftar Buku</title>
+    <style>
+        /* Reset dan base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* Container utama */
+        .container {
+            width: 100%;
+            height: 100vh;
+            background-color: #ffffff;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .navigation {
+            background-color: #34495e;
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-item {
+            margin: 0;
+        }
+
+        .nav-button {
+            display: block;
+            padding: 15px 30px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background-color: #2c3e50;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .nav-button:hover .nav-link {
+            color: #3498db;
+        }
+
+        /* Content area */
+        .content {
+            flex: 1;
+            padding: 40px 30px;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .content-header h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .content-header::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #3498db;
+            margin: 15px auto;
+        }
+
+        /* Table Styles */
+        .table-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+        .book-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        .book-table thead {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+        }
+
+        .book-table th {
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .book-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 1rem;
+        }
+
+        .book-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .book-table tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-table tbody tr:nth-child(even) {
+            background-color: #fdfdfd;
+        }
+
+        /* Status badges */
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+            min-width: 80px;
+        }
+
+        .status.tersedia {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.dipinjam {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        /* Nomor styling */
+        .book-number {
+            font-weight: bold;
+            color: #3498db;
+            text-align: center;
+        }
+
+        /* Title styling */
+        .book-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* Author styling */
+        .book-author {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-list {
+                flex-direction: column;
+            }
+
+            .nav-button {
+                padding: 12px 20px;
+                border-bottom: 1px solid #2c3e50;
+            }
+
+            .content {
+                padding: 30px 15px;
+            }
+
+            .content-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .book-table th,
+            .book-table td {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+
+            .book-table th {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Animasi halus */
+        .container {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading animation untuk table */
+        .table-container {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Perpustakaan Kabupaten Jepara</h1>
+            <p>Pusat Pengetahuan dan Informasi</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <button class="nav-button">
+                        <a href="index.html" class="nav-link">Beranda</a>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-button">
+                        <a href="index2.html" class="nav-link">Daftar Buku</a>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-button">
+                        <a href="index3.html" class="nav-link">Kontak</a>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <h2>Daftar Buku</h2>
+            </div>
+
+            <div class="table-container">
+                <table class="book-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Judul</th>
+                            <th>Penulis</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="book-number">1</td>
+                            <td class="book-title">One Piece</td>
+                            <td class="book-author">Eiichiro Oda</td>
+                            <td><span class="status tersedia">Tersedia</span></td>
+                        </tr>
+                        <tr>
+                            <td class="book-number">2</td>
+                            <td class="book-title">Naruto</td>
+                            <td class="book-author">Masashi Kishimoto</td>
+                            <td><span class="status dipinjam">Dipinjam</span></td>
+                        </tr>
+                        <tr>
+                            <td class="book-number">3</td>
+                            <td class="book-title">Attack on Titan</td>
+                            <td class="book-author">Hajime Isayama</td>
+                            <td><span class="status tersedia">Tersedia</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
